@@ -182,7 +182,11 @@ Be thorough but objective. Consider:
 - Presence of citations and references
 - Author expertise and accountability`;
 
-  const model = process.env.AI_MODEL || "llama3:latest";
+  const model =
+    process.env.AI_MODEL ||
+    (process.env.OPENAI_API_KEY || process.env.AI_INTEGRATIONS_OPENAI_API_KEY
+      ? "gpt-4o-mini"
+      : "llama3:latest");
   const response = await openai.chat.completions.create({
     model,
     messages: [{ role: "user", content: prompt }],
