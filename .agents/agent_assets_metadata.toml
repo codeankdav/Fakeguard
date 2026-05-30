@@ -1,0 +1,8 @@
+uploads = []
+generated = []
+
+[[outputs]]
+id = "zyFm-frx_RTiWxMolQL25"
+uri = "file://fakeguard-source.tar.gz"
+type = "unspecified"
+title = "FakeGuard - Full Source Code"

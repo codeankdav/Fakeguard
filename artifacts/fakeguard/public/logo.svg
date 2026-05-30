@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none">
+  <!-- Outer Shield Outline -->
+  <path d="M100 10 C140 15 170 35 180 80 C185 110 170 145 100 190 C30 145 15 110 20 80 C30 35 60 15 100 10 Z" 
+        stroke="currentColor" stroke-width="8" stroke-linejoin="round" fill="transparent"/>
+  <!-- Inner Shield Fill -->
+  <path d="M100 28 C130 32 150 48 158 82 C162 105 150 132 100 168 C50 132 38 105 42 82 C50 48 70 32 100 28 Z" 
+        fill="currentColor" opacity="0.15"/>
+  <!-- Checkmark / Magnifying Glass fusion -->
+  <circle cx="90" cy="85" r="25" stroke="currentColor" stroke-width="12" fill="none" />
+  <line x1="108" y1="103" x2="135" y2="130" stroke="currentColor" stroke-width="14" stroke-linecap="round"/>
+</svg>

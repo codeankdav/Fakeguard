@@ -1,0 +1,352 @@
+openapi: 3.1.0
+info:
+  title: Api
+  version: 0.1.0
+  description: FakeGuard API specification
+servers:
+  - url: /api
+    description: Base API path
+tags:
+  - name: health
+    description: Health operations
+  - name: articles
+    description: Article analysis operations
+  - name: stats
+    description: Analytics and stats operations
+paths:
+  /healthz:
+    get:
+      operationId: healthCheck
+      tags: [health]
+      summary: Health check
+      description: Returns server health status
+      responses:
+        "200":
+          description: Healthy
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthStatus"
+
+  /articles:
+    get:
+      operationId: listArticles
+      tags: [articles]
+      summary: List analyzed articles
+      parameters:
+        - name: verdict
+          in: query
+          required: false
+          schema:
+            type: string
+            enum: [fake, real, uncertain]
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 20
+        - name: offset
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 0
+      responses:
+        "200":
+          description: List of analyzed articles
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Article"
+    post:
+      operationId: analyzeArticle
+      tags: [articles]
+      summary: Submit article for AI-powered fake news analysis
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ArticleInput"
+      responses:
+        "201":
+          description: Article analysis result
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Article"
+        "400":
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+
+  /articles/{id}:
+    get:
+      operationId: getArticle
+      tags: [articles]
+      summary: Get a specific article analysis
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Article analysis detail
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Article"
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+    delete:
+      operationId: deleteArticle
+      tags: [articles]
+      summary: Delete an article analysis
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+
+  /articles/{id}/share:
+    post:
+      operationId: shareArticle
+      tags: [articles]
+      summary: Generate a shareable link token for an article analysis
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Share token and URL
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ShareResult"
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+
+  /articles/shared/{shareToken}:
+    get:
+      operationId: getSharedArticle
+      tags: [articles]
+      summary: Get a publicly shared article analysis by share token
+      parameters:
+        - name: shareToken
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Shared article analysis
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Article"
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+
+  /stats/overview:
+    get:
+      operationId: getStatsOverview
+      tags: [stats]
+      summary: Get platform-wide analysis stats overview
+      responses:
+        "200":
+          description: Stats overview
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StatsOverview"
+
+  /stats/recent:
+    get:
+      operationId: getRecentAnalyses
+      tags: [stats]
+      summary: Get recent analyses feed (public)
+      parameters:
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 10
+      responses:
+        "200":
+          description: Recent analyses
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ArticleSummary"
+
+components:
+  schemas:
+    HealthStatus:
+      type: object
+      properties:
+        status:
+          type: string
+      required:
+        - status
+
+    Article:
+      type: object
+      properties:
+        id:
+          type: integer
+        userId:
+          type: ["string", "null"]
+        title:
+          type: ["string", "null"]
+        url:
+          type: ["string", "null"]
+        content:
+          type: ["string", "null"]
+        verdict:
+          type: string
+          enum: [fake, real, uncertain]
+        confidenceScore:
+          type: number
+        explanation:
+          type: string
+        evidence:
+          type: array
+          items:
+            type: string
+        redFlags:
+          type: array
+          items:
+            type: string
+        positiveIndicators:
+          type: array
+          items:
+            type: string
+        shareToken:
+          type: ["string", "null"]
+        analyzedAt:
+          type: string
+          format: date-time
+        createdAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - verdict
+        - confidenceScore
+        - explanation
+        - evidence
+        - redFlags
+        - positiveIndicators
+        - analyzedAt
+        - createdAt
+
+    ArticleSummary:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: ["string", "null"]
+        url:
+          type: ["string", "null"]
+        verdict:
+          type: string
+          enum: [fake, real, uncertain]
+        confidenceScore:
+          type: number
+        analyzedAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - verdict
+        - confidenceScore
+        - analyzedAt
+
+    ArticleInput:
+      type: object
+      properties:
+        url:
+          type: string
+        content:
+          type: string
+        title:
+          type: string
+      required: []
+
+    StatsOverview:
+      type: object
+      properties:
+        totalAnalyzed:
+          type: integer
+        fakeCount:
+          type: integer
+        realCount:
+          type: integer
+        uncertainCount:
+          type: integer
+        avgConfidenceScore:
+          type: number
+        analyzedToday:
+          type: integer
+      required:
+        - totalAnalyzed
+        - fakeCount
+        - realCount
+        - uncertainCount
+        - avgConfidenceScore
+        - analyzedToday
+
+    ShareResult:
+      type: object
+      properties:
+        shareToken:
+          type: string
+        shareUrl:
+          type: string
+      required:
+        - shareToken
+        - shareUrl
+
+    ApiError:
+      type: object
+      properties:
+        error:
+          type: string
+      required:
+        - error

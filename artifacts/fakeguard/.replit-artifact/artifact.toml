@@ -1,0 +1,31 @@
+kind = "web"
+previewPath = "/"
+title = "FakeGuard - Fake News Detector"
+version = "1.0.0"
+id = "artifacts/fakeguard"
+router = "path"
+
+[[integratedSkills]]
+name = "react-vite"
+version = "1.0.0"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 22403
+
+[services.development]
+run = "pnpm --filter @workspace/fakeguard run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/fakeguard", "run", "build" ]
+publicDir = "artifacts/fakeguard/dist/public"
+serve = "static"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "22403"
+BASE_PATH = "/"
