@@ -1,6 +1,6 @@
-import express from "express";
+import express, { type Application } from "express";
 import cors from "cors";
-import { pinoHttp } from "pino-http";
+import pinoHttp from "pino-http";
 import { clerkMiddleware } from "@clerk/express";
 import { publishableKeyFromHost } from "@clerk/shared/keys";
 import {
@@ -11,7 +11,7 @@ import {
 import router from "./routes/index.js";
 import { logger } from "./lib/logger.js";
 
-const app = express();
+const app: Application = express();
 
 app.use(
   pinoHttp({
