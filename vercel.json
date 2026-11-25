@@ -5,7 +5,8 @@
   "outputDirectory": "artifacts/fakeguard/dist/public",
   "functions": {
     "api/[...path].mts": {
-      "maxDuration": 60
+      "maxDuration": 60,
+      "includeFiles": "artifacts/api-server/src/**"
     }
   },
   "rewrites": [
