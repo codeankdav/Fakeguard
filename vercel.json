@@ -1,12 +1,12 @@
 {
   "$schema": "https://vercel.sh",
   "installCommand": "pnpm install --frozen-lockfile",
-  "buildCommand": "pnpm --filter @workspace/fakeguard run build",
+  "buildCommand": "pnpm --filter @workspace/fakeguard run build && pnpm --filter @workspace/api-server exec esbuild src/app.ts --bundle --platform=node --format=esm --packages=external --outfile=dist/app.mjs",
   "outputDirectory": "artifacts/fakeguard/dist/public",
   "functions": {
-    "api/[...path].ts": {
+    "api/[...path].js": {
       "maxDuration": 60,
-      "includeFiles": "artifacts/api-server/src/**"
+      "includeFiles": "artifacts/api-server/dist/**"
     }
   },
   "rewrites": [
