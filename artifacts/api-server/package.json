@@ -8,7 +8,7 @@
     "build": "node ./build.mjs",
     "start": "node --enable-source-maps ./dist/index.mjs",
     "typecheck": "tsc -p tsconfig.json --noEmit",
-    "build:vercel": "esbuild src/app.ts --bundle --platform=node --format=esm --external:@clerk/express --external:@clerk/shared --external:cookie-parser --external:cors --external:drizzle-orm --external:express --external:http-proxy-middleware --external:pino --external:pino-http --outfile=dist/app.mjs"
+    "build:vercel": "esbuild src/app.ts --bundle --platform=node --format=esm --banner:js=\"import { createRequire } from 'module'; const require = createRequire(import.meta.url);\" --outfile=dist/app.mjs"
   },
   "dependencies": {
     "@clerk/express": "^2.1.21",
