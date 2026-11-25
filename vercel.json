@@ -4,12 +4,16 @@
   "buildCommand": "pnpm --filter @workspace/fakeguard run build && pnpm --filter @workspace/api-server run build:vercel",
   "outputDirectory": "artifacts/fakeguard/dist/public",
   "functions": {
-    "api/[...path].js": {
+    "api/index.js": {
       "maxDuration": 60,
       "includeFiles": "artifacts/api-server/dist/**"
     }
   },
   "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "/api/index"
+    },
     {
       "source": "/((?!api/).*)",
       "destination": "/index.html"
