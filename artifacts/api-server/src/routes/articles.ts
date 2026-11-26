@@ -183,7 +183,7 @@ Be thorough but objective. Consider:
 - Author expertise and accountability`;
 
   const model =
-    process.env.AI_MODEL ||
+    process.env.AI_MODEL?.trim() ||
     (process.env.OPENAI_API_KEY || process.env.AI_INTEGRATIONS_OPENAI_API_KEY
       ? "gpt-4o-mini"
       : "llama3:latest");
