@@ -33,7 +33,7 @@ app.use(
   }),
 );
 
-app.use(CLERK_PROXY_PATH, clerkProxyMiddleware());
+if (process.env.REPL_ID) { app.use(CLERK_PROXY_PATH, clerkProxyMiddleware()); }
 
 app.use(cors({ credentials: true, origin: true }));
 app.use(express.json({ limit: "10mb" }));
